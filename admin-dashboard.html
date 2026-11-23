@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopZone Admin Dashboard</title>
+    <link rel="stylesheet" href="admin-dashboard.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h2>SHOPZONE</h2>
+        <p class="admin-label">ADMIN PANEL</p>
+
+        <nav>
+            <a href="#dashboard" class="active">Dashboard</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#orders">Orders</a>
+            <a href="#customers">Customers</a>
+            <a href="#customer-analytics">Customer Analytics</a>
+            <a href="#stock-alerts">Stock Alerts</a>
+            <a href="#stock-movements">Stock Movement History</a>
+            <a href="#products">Products</a>
+            <a href="#coupons">Discount Coupons</a>
+            <a href="#reviews">Review Management</a>
+        </nav>
+
+        <button id="logout-button">Logout</button>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Welcome to your ShopZone management panel.</p>
+            </div>
+            <span class="admin-badge">Administrator</span>
+        </header>
+
+        <!-- DASHBOARD STATISTICS -->
+        <section id="dashboard" class="stats-container">
+
+            <div class="stat-card">
+                <h3>Total Orders</h3>
+                <p id="total-orders">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Sales</h3>
+                <p id="total-sales">₦0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Customers</h3>
+                <p id="total-customers">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Pending Orders</h3>
+                <p id="pending-orders">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Stock Alerts</h3>
+                <p id="stock-alert-count">0</p>
+            </div>
+
+        </section>
+
+        <!-- STOCK ALERTS -->
+        <section id="stock-alerts" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Stock Alerts</h2>
+                <span>Monitor products that need restocking</span>
+            </div>
+
+            <div id="stock-alert-summary">
+                <p>Loading stock alerts...</p>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Available Stock</th>
+                            <th>Alert</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="low-stock-alerts-body">
+                        <tr>
+                            <td colspan="4">Loading stock alerts...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- STOCK MOVEMENT HISTORY -->
+        <section id="stock-movements" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Stock Movement History</h2>
+                <span>Track all stock additions, sales and restorations</span>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Movement Type</th>
+                            <th>Quantity Changed</th>
+                            <th>Previous Stock</th>
+                            <th>New Stock</th>
+                            <th>Order Number</th>
+                            <th>Date and Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="stock-movements-body">
+                        <tr>
+                            <td colspan="7">Loading stock movement history...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- DASHBOARD ANALYTICS -->
+        <section id="analytics" class="dashboard-section analytics-section">
+
+            <div class="section-heading">
+                <h2>Dashboard Analytics</h2>
+                <span>Monitor your store's sales performance</span>
+            </div>
+
+            <div class="analytics-grid">
+
+                <div class="analytics-card">
+                    <h3>Monthly Revenue</h3>
+                    <p>Revenue generated each month</p>
+                    <div class="chart-container">
+                        <canvas id="monthly-revenue-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Best-Selling Products</h3>
+                    <p>Products ranked by quantity sold</p>
+                    <div class="chart-container">
+                        <canvas id="best-selling-chart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="analytics-card sales-performance-card">
+                <h3>Product Sales Performance</h3>
+                <p>See how many units of each product have been sold.</p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Units Sold</th>
+                                <th>Total Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-performance-body">
+                            <tr>
+                                <td colspan="3">Loading sales analytics...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ORDER MANAGEMENT -->
+        <section id="orders" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Order Management</h2>
+                <span>Search and manage customer orders</span>
+            </div>
+
+            <div class="order-filters">
+
+                <input
+                    type="search"
+                    id="order-search"
+                    placeholder="Search by order number or customer name..."
+                >
+
+                <select id="order-status-filter">
+                    <option value="all">All Orders</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr>
+                            <td colspan="6">Loading orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- ORDER DETAILS MODAL -->
+        <div id="order-details-modal" class="order-modal" hidden>
+            <div class="order-modal-content">
+
+                <div class="order-modal-header">
+                    <h2>Order Details</h2>
+                    <button
+                        type="button"
+                        id="close-order-modal"
+                        aria-label="Close order details"
+                    >&times;</button>
+                </div>
+
+                <div id="order-details-content">
+                    Loading order details...
+                </div>
+
+            </div>
+        </div>
+
+        <!-- CUSTOMER MANAGEMENT -->
+        <section id="customers" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Customer Management</h2>
+                <span>Customers who have placed orders</span>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Email Address</th>
+                            <th>Phone Number</th>
+                            <th>Total Orders</th>
+                            <th>Total Spent</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="customers-table-body">
+                        <tr>
+                            <td colspan="6">Loading customers...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- CUSTOMER DETAILS MODAL -->
+        <div id="customer-details-modal" class="order-modal" hidden>
+
+            <div class="order-modal-content">
+
+                <div class="order-modal-header">
+                    <h2>Customer Details</h2>
+
+                    <button
+                        type="button"
+                        id="close-customer-modal"
+                        aria-label="Close customer details"
+                    >&times;</button>
+                </div>
+
+                <div id="customer-details-content">
+                    Loading customer details...
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CUSTOMER ANALYTICS -->
+        <section id="customer-analytics" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Customer Analytics</h2>
+                <span>Understand your customers and their buying behaviour</span>
+            </div>
+
+            <div id="customer-analytics-content">
+                <p>Loading customer analytics...</p>
+            </div>
+
+        </section>
+
+        <!-- PRODUCT MANAGEMENT -->
+        <section id="products" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Product Management</h2>
+                <span>Add and manage your store products</span>
+            </div>
+
+            <div class="product-form-container">
+
+                <h3 id="product-form-title">Add New Product</h3>
+
+                <form id="product-form">
+
+                    <input type="hidden" id="product-id">
+
+                    <div class="product-form-grid">
+
+                        <div class="form-group">
+                            <label for="product-name">Product Name</label>
+                            <input type="text" id="product-name" placeholder="Enter product name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product-price">Price (₦)</label>
+                            <input type="number" id="product-price" min="0" step="0.01" placeholder="Enter price" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product-category">Category</label>
+                            <select id="product-category" required>
+                                <option value="">Select category</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="accessories">Accessories</option>
+                                <option value="home">Home</option>
+                                <option value="sports">Sports</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product-stock">Stock Quantity</label>
+                            <input type="number" id="product-stock" min="0" step="1" placeholder="Enter stock quantity" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="product-image">Image URL</label>
+                            <input type="url" id="product-image" placeholder="https://example.com/product.jpg">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="product-description">Description</label>
+                            <textarea id="product-description" rows="4" placeholder="Describe your product"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="product-form-buttons">
+                        <button type="submit" id="save-product-button">Add Product</button>
+
+                        <button type="button" id="cancel-edit-button" hidden>
+                            Cancel Edit
+                        </button>
+                    </div>
+
+                    <p id="product-message"></p>
+
+                </form>
+
+            </div>
+
+            <div class="section-heading product-list-heading">
+                <h2>All Products</h2>
+                <span>Products saved in your database</span>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="products-table-body">
+                        <tr>
+                            <td colspan="5">Loading products...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- DISCOUNT COUPON MANAGEMENT -->
+        <section id="coupons" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Discount Coupon Management</h2>
+                <span>Create and manage promotional discount codes</span>
+            </div>
+
+            <div class="product-form-container">
+
+                <h3>Create New Coupon</h3>
+
+                <form id="coupon-form">
+
+                    <div class="product-form-grid">
+
+                        <div class="form-group">
+                            <label for="coupon-code">Coupon Code</label>
+                            <input type="text" id="coupon-code" placeholder="Example: WELCOME10" maxlength="30" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coupon-discount-type">Discount Type</label>
+                            <select id="coupon-discount-type" required>
+                                <option value="percentage">Percentage (%)</option>
+                                <option value="fixed">Fixed Amount (₦)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coupon-discount-value">Discount Value</label>
+                            <input type="number" id="coupon-discount-value" min="0.01" step="0.01" placeholder="Example: 10" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coupon-minimum-order">Minimum Order Amount (₦)</label>
+                            <input type="number" id="coupon-minimum-order" min="0" step="0.01" value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coupon-maximum-discount">Maximum Discount (₦)</label>
+                            <input type="number" id="coupon-maximum-discount" min="0" step="0.01" placeholder="Leave empty for no limit">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coupon-usage-limit">Usage Limit</label>
+                            <input type="number" id="coupon-usage-limit" min="1" step="1" placeholder="Leave empty for unlimited">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coupon-expiry-date">Expiry Date</label>
+                            <input type="datetime-local" id="coupon-expiry-date">
+                        </div>
+
+                    </div>
+
+                    <div class="product-form-buttons">
+                        <button type="submit" id="save-coupon-button">
+                            Create Coupon
+                        </button>
+
+                        <button type="reset">
+                            Clear Form
+                        </button>
+                    </div>
+
+                    <p id="coupon-message"></p>
+
+                </form>
+
+            </div>
+
+            <div class="section-heading product-list-heading">
+                <h2>All Discount Coupons</h2>
+                <span>View and manage your promotional codes</span>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Coupon Code</th>
+                            <th>Discount</th>
+                            <th>Minimum Order</th>
+                            <th>Usage</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="coupons-table-body">
+                        <tr>
+                            <td colspan="7">Loading coupons...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- =====================================
+             ADMIN REVIEW MANAGEMENT
+        ====================================== -->
+
+        <section id="reviews" class="dashboard-section">
+
+            <div class="section-heading">
+                <h2>Customer Review Management</h2>
+                <span>Review, approve and manage customer feedback</span>
+            </div>
+
+            <!-- REVIEW STATISTICS -->
+
+            <div class="stats-container">
+
+                <div class="stat-card">
+                    <h3>Total Reviews</h3>
+                    <p id="admin-total-reviews">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Verified Reviews</h3>
+                    <p id="admin-verified-reviews">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Unverified Reviews</h3>
+                    <p id="admin-unverified-reviews">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Pending Reviews</h3>
+                    <p id="admin-pending-reviews">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Approved Reviews</h3>
+                    <p id="admin-approved-reviews">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Rejected Reviews</h3>
+                    <p id="admin-rejected-reviews">0</p>
+                </div>
+
+            </div>
+
+            <!-- REVIEW SEARCH AND FILTERS -->
+
+            <div class="order-filters">
+
+                <input
+                    type="search"
+                    id="admin-review-search"
+                    placeholder="Search by customer, email or product..."
+                >
+
+                <select id="admin-review-filter">
+
+                    <option value="all">All Reviews</option>
+                    <option value="pending">Pending Reviews</option>
+                    <option value="approved">Approved Reviews</option>
+                    <option value="rejected">Rejected Reviews</option>
+                    <option value="verified">Verified Purchases</option>
+                    <option value="unverified">Unverified Purchases</option>
+
+                </select>
+
+            </div>
+
+            <!-- REVIEW TABLE -->
+
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Rating</th>
+                            <th>Review</th>
+                            <th>Verification</th>
+                            <th>Moderation Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="admin-reviews-table-body">
+
+                        <tr>
+                            <td colspan="9">Loading customer reviews...</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p id="admin-review-message"></p>
+
+        </section>
+
+        <footer>
+            © 2026 ShopZone Admin Panel. All rights reserved.
+        </footer>
+
+    </main>
+
+    <!-- EXISTING DASHBOARD SCRIPTS -->
+
+    <script src="admin-dashboard.js"></script>
+    <script src="analytics.js"></script>
+    <script src="customer-analytics.js"></script>
+    <script src="stock-movements.js"></script>
+    <script src="coupon-management.js"></script>
+
+    <!-- ADMIN REVIEW MODERATION -->
+
+    <script src="admin-review-moderation.js"></script>
+
+</body>
+</html>
