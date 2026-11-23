@@ -27,14 +27,15 @@ app.use(helmet());
 
 const allowedOrigins = [
     "http://127.0.0.1:5500",
-    "http://localhost:5500"
+    "http://localhost:5500",
+    ...(process.env.FRONTEND_URL || "")
+        .split(",")
+        .map(origin => origin.trim())
+        .filter(Boolean)
 ];
 
 app.use(cors({
     origin: (origin, callback) => {
-
-        // Allow requests without an Origin header,
-        // such as direct server-to-server requests.
 
         if (!origin) {
             return callback(null, true);
@@ -44,7 +45,7 @@ app.use(cors({
             return callback(null, true);
         }
 
-        return callback(null, false);
+        return callback(new Error("Access denied by CORS policy."));
     },
 
     methods: [
@@ -97,6 +98,7 @@ const productRoutes = require("./routes/productRoutes");
 const stockMovementRoutes = require("./routes/stockMovementRoutes");
 const couponRoutes = require("./routes/couponRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const imageRoutes = require("./routes/imageRoutes");
 
 // =====================================
 // WELCOME ROUTE
@@ -116,6 +118,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/stock-movements", stockMovementRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/images", imageRoutes);
 
 // =====================================
 // SERVER CONFIGURATION

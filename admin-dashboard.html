@@ -370,7 +370,121 @@
 
                         <div class="form-group full-width">
                             <label for="product-image">Image URL</label>
-                            <input type="url" id="product-image" placeholder="https://example.com/product.jpg">
+                            <input
+                                type="url"
+                                id="product-image"
+                                placeholder="Your uploaded image URL will appear here"
+                            >
+                        </div>
+
+                        <!-- PRODUCT IMAGE TOOLS -->
+                        <div class="form-group full-width">
+
+                            <div class="image-tools-panel">
+
+                                <h3>Product Image Manager</h3>
+
+                                <p>
+                                    Search for product pictures or upload
+                                    your own image.
+                                </p>
+
+                                <!-- PIXABAY SEARCH -->
+                                <div class="image-search-controls">
+
+                                    <label for="product-image-search">
+                                        Search for product pictures
+                                    </label>
+
+                                    <div class="image-search-row">
+
+                                        <input
+                                            type="search"
+                                            id="product-image-search"
+                                            placeholder="Enter product name, e.g. iPhone 16"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            id="search-product-images"
+                                        >
+                                            Search Images
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <p
+                                    id="image-search-message"
+                                    aria-live="polite"
+                                ></p>
+
+                                <!-- PIXABAY RESULTS -->
+                                <div
+                                    id="product-image-results"
+                                    class="product-image-results"
+                                ></div>
+
+                                <p class="image-attribution-note">
+                                    Image search powered by Pixabay.
+                                    Please select an image that accurately
+                                    represents your product.
+                                </p>
+
+                                <hr>
+
+                                <!-- UPLOAD OWN IMAGE -->
+                                <div class="image-upload-section">
+
+                                    <label for="product-image-upload">
+                                        Or upload your own product picture
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        id="product-image-upload"
+                                        accept="image/jpeg,image/png,image/webp"
+                                    >
+
+                                    <small>
+                                        Accepted formats: JPG, PNG and WEBP.
+                                        Maximum file size: 5MB.
+                                    </small>
+
+                                    <button
+                                        type="button"
+                                        id="upload-product-image"
+                                    >
+                                        Upload Picture
+                                    </button>
+
+                                </div>
+
+                                <p
+                                    id="image-upload-message"
+                                    aria-live="polite"
+                                ></p>
+
+                                <!-- SELECTED IMAGE PREVIEW -->
+                                <div
+                                    id="selected-product-image-preview"
+                                    class="selected-product-image-preview"
+                                    hidden
+                                >
+
+                                    <h4>Selected Product Image</h4>
+
+                                    <img
+                                        id="selected-product-image"
+                                        src=""
+                                        alt="Selected product preview"
+                                    >
+
+                                </div>
+
+                            </div>
+
                         </div>
 
                         <div class="form-group full-width">
@@ -522,10 +636,7 @@
 
         </section>
 
-        <!-- =====================================
-             ADMIN REVIEW MANAGEMENT
-        ====================================== -->
-
+        <!-- ADMIN REVIEW MANAGEMENT -->
         <section id="reviews" class="dashboard-section">
 
             <div class="section-heading">
@@ -534,7 +645,6 @@
             </div>
 
             <!-- REVIEW STATISTICS -->
-
             <div class="stats-container">
 
                 <div class="stat-card">
@@ -570,7 +680,6 @@
             </div>
 
             <!-- REVIEW SEARCH AND FILTERS -->
-
             <div class="order-filters">
 
                 <input
@@ -593,7 +702,6 @@
             </div>
 
             <!-- REVIEW TABLE -->
-
             <div class="table-container">
 
                 <table>
@@ -634,16 +742,15 @@
     </main>
 
     <!-- EXISTING DASHBOARD SCRIPTS -->
-
     <script src="admin-dashboard.js"></script>
     <script src="analytics.js"></script>
     <script src="customer-analytics.js"></script>
     <script src="stock-movements.js"></script>
     <script src="coupon-management.js"></script>
-
-    <!-- ADMIN REVIEW MODERATION -->
-
     <script src="admin-review-moderation.js"></script>
+
+    <!-- NEW PRODUCT IMAGE MANAGER -->
+    <script src="admin-product-images.js"></script>
 
 </body>
 </html>
