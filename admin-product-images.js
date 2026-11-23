@@ -3,7 +3,7 @@
 // PIXABAY + CLOUDINARY
 // =====================================
 
-const IMAGE_API_URL = "http://localhost:5000/api/images";
+const IMAGE_API_URL = "https://shopzone-sojz.onrender.com/api/images";
 
 const imageAdminToken = localStorage.getItem(
     "shopzone-admin-token"

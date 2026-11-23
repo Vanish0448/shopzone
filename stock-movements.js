@@ -3,7 +3,7 @@
 // =====================================
 
 const STOCK_MOVEMENTS_API_URL =
-    "http://localhost:5000/api/stock-movements";
+    "https://shopzone-sojz.onrender.com/api/stock-movements";
 
 const stockMovementsBody =
     document.getElementById("stock-movements-body");

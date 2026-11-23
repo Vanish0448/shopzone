@@ -10,9 +10,9 @@
 
     window.shopZoneAdminReviewModerationLoaded = true;
 
-    const API_URL = "http://localhost:5000/api/reviews/admin/all";
+    const API_URL = "https://shopzone-sojz.onrender.com/api/reviews/admin/all";
 
-    const MODERATION_API_URL = "http://localhost:5000/api/reviews/admin";
+    const MODERATION_API_URL = "https://shopzone-sojz.onrender.com/api/reviews/admin";
 
     const adminToken = localStorage.getItem("shopzone-admin-token");
 

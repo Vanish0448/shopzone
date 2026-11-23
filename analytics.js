@@ -3,7 +3,7 @@
 // DATE FILTERING + PDF + EXCEL EXPORT
 // =====================================
 
-const ANALYTICS_API_URL = "http://localhost:5000/api/orders";
+const ANALYTICS_API_URL = "https://shopzone-sojz.onrender.com/api/orders";
 
 const analyticsToken = localStorage.getItem("shopzone-admin-token");
 

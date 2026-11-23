@@ -9,7 +9,7 @@
 
     window.shopZoneReviewsLoaded = true;
 
-    const API_URL = "http://localhost:5000/api";
+    const API_URL = "https://shopzone-sojz.onrender.com/api";
     const PRODUCTS_URL = `${API_URL}/products`;
     const REVIEWS_URL = `${API_URL}/reviews`;
 

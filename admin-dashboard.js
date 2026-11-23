@@ -2,8 +2,8 @@
 // SHOPZONE ADMIN DASHBOARD
 // =====================================
 
-const ORDERS_API_URL = "http://localhost:5000/api/orders";
-const PRODUCTS_API_URL = "http://localhost:5000/api/products";
+const ORDERS_API_URL = "https://shopzone-sojz.onrender.com/api/orders";
+const PRODUCTS_API_URL = "https://shopzone-sojz.onrender.com/api/products";
 
 const adminToken = localStorage.getItem("shopzone-admin-token");
 

@@ -9,7 +9,7 @@
 
     window.shopZoneCouponManagementLoaded = true;
 
-    const COUPONS_API_URL = "http://localhost:5000/api/coupons";
+    const COUPONS_API_URL = "https://shopzone-sojz.onrender.com/api/coupons";
     const COUPON_ANALYTICS_URL = `${COUPONS_API_URL}/analytics`;
 
     const couponAdminToken = localStorage.getItem("shopzone-admin-token");
@@ -633,7 +633,6 @@
 
             let expiryDate = null;
 
-            // CORRECT DATETIME-LOCAL HANDLING
             if (expiryInput) {
                 const parsedDate = new Date(expiryInput);
 

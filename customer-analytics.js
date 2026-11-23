@@ -2,7 +2,7 @@
 // SHOPZONE CUSTOMER ANALYTICS
 // =====================================
 
-const CUSTOMER_ANALYTICS_API_URL = "http://localhost:5000/api/orders";
+const CUSTOMER_ANALYTICS_API_URL = "https://shopzone-sojz.onrender.com/api/orders";
 
 const customerAnalyticsToken = localStorage.getItem("shopzone-admin-token");
 
@@ -39,6 +39,12 @@ async function loadCustomerAnalytics() {
         });
 
         const data = await response.json();
+
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem("shopzone-admin-token");
+            window.location.href = "admin.html";
+            return;
+        }
 
         if (!response.ok || !data.success) {
             throw new Error(data.message || "Unable to load customer analytics.");

@@ -2,8 +2,7 @@
 // SHOPZONE ADMIN CONFIGURATION
 // =====================================
 
-const ADMIN_API_URL = "http://localhost:5000/api/admin";
-
+const ADMIN_API_URL = "https://shopzone-sojz.onrender.com/api/admin";
 
 // =====================================
 // HTML ELEMENTS
@@ -18,7 +17,6 @@ const passwordInput = document.getElementById("admin-password");
 const loginButton = document.getElementById("login-button");
 
 const loginMessage = document.getElementById("login-message");
-
 
 // =====================================
 // ADMIN LOGIN
