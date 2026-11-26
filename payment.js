@@ -2,9 +2,6 @@
 // SHOPZONE PAYSTACK PAYMENT INTEGRATION
 // =====================================
 
-// LIVE BACKEND PAYMENT API
-// Paystack test keys remain on the backend.
-
 const PAYMENT_API_URL =
     "https://shopzone-sojz.onrender.com/api/payments";
 
@@ -23,7 +20,7 @@ const paymentConfirmationSection =
     document.getElementById("confirmation-section");
 
 const paymentOrderNumber =
-    document.getElementById("order-number");
+    document.getElementById("confirmation-order-number");
 
 const paymentConfirmationMessage =
     document.getElementById("confirmation-message");
@@ -38,9 +35,7 @@ const paymentSubmitButton =
 
 function showPaymentMessage(message, type = "error") {
 
-    let messageElement = document.getElementById(
-        "payment-message"
-    );
+    let messageElement = document.getElementById("payment-message");
 
     if (!messageElement) {
 
@@ -63,6 +58,7 @@ function showPaymentMessage(message, type = "error") {
         type === "success"
             ? "coupon-success"
             : "coupon-error";
+
 }
 
 
@@ -94,12 +90,10 @@ function getPaymentCart() {
         }
 
         return savedCart.filter(item =>
-
             item.id &&
             Number.isInteger(item.quantity) &&
             item.quantity >= 1 &&
             item.quantity <= 99
-
         );
 
     } catch (error) {
@@ -107,6 +101,7 @@ function getPaymentCart() {
         return [];
 
     }
+
 }
 
 
@@ -141,13 +136,9 @@ function getPaymentCustomerDetails() {
 
 function getPaymentCouponCode() {
 
-    const couponMessage = document.getElementById(
-        "coupon-message"
-    );
+    const couponMessage = document.getElementById("coupon-message");
 
-    const couponInput = document.getElementById(
-        "coupon-code"
-    );
+    const couponInput = document.getElementById("coupon-code");
 
     if (
         couponMessage &&
@@ -264,8 +255,6 @@ async function initializeShopZonePayment() {
 
         }
 
-        // SAVE REFERENCE FOR PAYMENT RECOVERY
-
         localStorage.setItem(
             "shopzone-pending-payment",
             JSON.stringify({
@@ -278,8 +267,6 @@ async function initializeShopZonePayment() {
 
             })
         );
-
-        // REDIRECT CUSTOMER TO PAYSTACK
 
         window.location.href = data.authorizationUrl;
 
@@ -297,7 +284,7 @@ async function initializeShopZonePayment() {
 
         paymentSubmitButton.disabled = false;
 
-        paymentSubmitButton.textContent = "Pay with Paystack";
+        paymentSubmitButton.textContent = "Pay Now";
 
     }
 
@@ -307,9 +294,6 @@ async function initializeShopZonePayment() {
 // =====================================
 // CAPTURE CHECKOUT SUBMISSION
 // =====================================
-
-// This capture-phase listener prevents the old demonstration
-// order handler in script.js from creating an unpaid order.
 
 paymentCheckoutForm.addEventListener(
     "submit",
@@ -329,6 +313,25 @@ paymentCheckoutForm.addEventListener(
 
 
 // =====================================
+// CLEAN PAYMENT CALLBACK FROM URL
+// =====================================
+
+function cleanPaymentCallbackURL() {
+
+    const cleanURL =
+        window.location.pathname +
+        window.location.hash;
+
+    window.history.replaceState(
+        {},
+        document.title,
+        cleanURL
+    );
+
+}
+
+
+// =====================================
 // VERIFY PAYSTACK PAYMENT
 // =====================================
 
@@ -338,14 +341,14 @@ async function verifyShopZonePayment(reference) {
 
     paymentConfirmationSection.hidden = false;
 
-    paymentConfirmationSection.scrollIntoView({
-        behavior: "smooth"
-    });
-
     paymentOrderNumber.textContent = "Verifying payment...";
 
     paymentConfirmationMessage.textContent =
         "Please wait while ShopZone securely verifies your payment with Paystack. Do not close this page.";
+
+    paymentConfirmationSection.scrollIntoView({
+        behavior: "smooth"
+    });
 
     try {
 
@@ -379,7 +382,7 @@ async function verifyShopZonePayment(reference) {
 
         const order = data.order;
 
-        // SAVE ORDER TO LOCAL BROWSER HISTORY
+        // SAVE ORDER TO LOCAL HISTORY
 
         let orderHistory = [];
 
@@ -399,8 +402,6 @@ async function verifyShopZonePayment(reference) {
 
         }
 
-        // AVOID DUPLICATE HISTORY ENTRIES
-
         const alreadySaved = orderHistory.some(
             item => item.orderNumber === order.orderNumber
         );
@@ -411,7 +412,8 @@ async function verifyShopZonePayment(reference) {
 
                 orderNumber: order.orderNumber,
 
-                date: order.date ||
+                date:
+                    order.date ||
                     order.createdAt ||
                     new Date().toISOString(),
 
@@ -434,6 +436,7 @@ async function verifyShopZonePayment(reference) {
             JSON.stringify(orderHistory)
         );
 
+
         // CLEAR CART AFTER VERIFIED PAYMENT
 
         localStorage.setItem(
@@ -444,6 +447,7 @@ async function verifyShopZonePayment(reference) {
         localStorage.removeItem(
             "shopzone-pending-payment"
         );
+
 
         // DISPLAY SUCCESSFUL ORDER
 
@@ -464,54 +468,59 @@ async function verifyShopZonePayment(reference) {
 
         paymentConfirmationMessage.textContent = message;
 
+
         // UPDATE CART DISPLAY
 
-        const cartItemsElement = document.getElementById(
-            "cart-items"
-        );
+        const cartItemsElement =
+            document.getElementById("cart-items");
 
-        const cartCountElement = document.getElementById(
-            "cart-count"
-        );
+        const cartCountElement =
+            document.getElementById("cart-count");
 
-        const cartTotalElement = document.getElementById(
-            "cart-total"
-        );
+        const cartTotalElement =
+            document.getElementById("cart-total");
 
-        const checkoutButton = document.getElementById(
-            "checkout-button"
-        );
+        const checkoutButton =
+            document.getElementById("checkout-button");
 
         if (cartItemsElement) {
+
             cartItemsElement.innerHTML =
                 "<p>Your cart is empty.</p>";
+
         }
 
         if (cartCountElement) {
+
             cartCountElement.textContent = "0";
+
         }
 
         if (cartTotalElement) {
+
             cartTotalElement.textContent = "₦0";
+
         }
 
         if (checkoutButton) {
+
             checkoutButton.hidden = true;
+
         }
+
 
         // RESET CHECKOUT FORM
 
         paymentCheckoutForm.reset();
 
-        // REMOVE COUPON DISPLAY
 
-        const couponMessage = document.getElementById(
-            "coupon-message"
-        );
+        // RESET COUPON
 
-        const couponCodeInput = document.getElementById(
-            "coupon-code"
-        );
+        const couponMessage =
+            document.getElementById("coupon-message");
+
+        const couponCodeInput =
+            document.getElementById("coupon-code");
 
         if (couponMessage) {
 
@@ -522,29 +531,38 @@ async function verifyShopZonePayment(reference) {
         }
 
         if (couponCodeInput) {
+
             couponCodeInput.value = "";
+
         }
 
-        // SHOW UPDATED ORDER HISTORY
 
-        const historyList = document.getElementById(
-            "order-history-list"
-        );
+        // UPDATE ORDER HISTORY DISPLAY
+
+        const historyList =
+            document.getElementById("order-history-list");
 
         if (historyList) {
 
-            const historyCard = document.createElement("div");
+            historyList.innerHTML = "";
 
-            historyCard.className = "order-card";
+            orderHistory.forEach(savedOrder => {
 
-            const orderDate = new Date(
-                order.date || order.createdAt || Date.now()
-            );
+                const historyCard =
+                    document.createElement("div");
 
-            historyCard.textContent =
-                `Order ${order.orderNumber} | ${orderDate.toLocaleString("en-NG")} | Total: ${paymentFormatNaira(order.total)}`;
+                historyCard.className = "order-card";
 
-            historyList.prepend(historyCard);
+                const orderDate = new Date(
+                    savedOrder.date || Date.now()
+                );
+
+                historyCard.textContent =
+                    `Order ${savedOrder.orderNumber} | ${orderDate.toLocaleString("en-NG")} | Total: ${paymentFormatNaira(savedOrder.total)}`;
+
+                historyList.appendChild(historyCard);
+
+            });
 
         }
 
@@ -565,8 +583,6 @@ async function verifyShopZonePayment(reference) {
         paymentConfirmationMessage.textContent =
             error.message +
             " Your cart has not been cleared. Please do not pay again immediately. Contact ShopZone support if you have already been charged.";
-
-        // KEEP THE PAYMENT REFERENCE FOR RECOVERY
 
         paymentCheckoutSection.hidden = false;
 
@@ -599,6 +615,11 @@ async function handleShopZonePaymentCallback() {
         urlParams.get("reference") ||
         urlParams.get("trxref");
 
+    // REMOVE CALLBACK PARAMETERS IMMEDIATELY.
+    // REFRESHING THE PAGE WILL NOT REPEAT VERIFICATION.
+
+    cleanPaymentCallbackURL();
+
     if (!reference) {
 
         paymentConfirmationSection.hidden = false;
@@ -614,8 +635,6 @@ async function handleShopZonePaymentCallback() {
         return;
 
     }
-
-    // VERIFY PAYMENT WITH SHOPZONE BACKEND
 
     await verifyShopZonePayment(reference);
 
