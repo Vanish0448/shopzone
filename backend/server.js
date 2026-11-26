@@ -45,7 +45,9 @@ app.use(cors({
             return callback(null, true);
         }
 
-        return callback(new Error("Access denied by CORS policy."));
+        return callback(
+            new Error("Access denied by CORS policy.")
+        );
     },
 
     methods: [
@@ -89,6 +91,22 @@ const trackingLimiter = rateLimit({
 app.use("/api/orders/track", trackingLimiter);
 
 // =====================================
+// PAYMENT RATE LIMITER
+// =====================================
+
+const paymentLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+
+    message: {
+        success: false,
+        message: "Too many payment attempts. Please try again later."
+    }
+});
+
+// =====================================
 // IMPORT ROUTES
 // =====================================
 
@@ -99,6 +117,7 @@ const stockMovementRoutes = require("./routes/stockMovementRoutes");
 const couponRoutes = require("./routes/couponRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const imageRoutes = require("./routes/imageRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 // =====================================
 // WELCOME ROUTE
@@ -112,12 +131,36 @@ app.get("/", (req, res) => {
 // API ROUTES
 // =====================================
 
+// PAYMENT ROUTES
+
+app.use("/api/payments", paymentLimiter);
+app.use("/api/payments", paymentRoutes);
+
+// PREVENT UNPAID ORDER CREATION
+
+app.post("/api/orders", (req, res) => {
+
+    res.status(410).json({
+        success: false,
+        message: "Direct order creation is disabled. Please complete payment through checkout."
+    });
+
+});
+
+// EXISTING ORDER ROUTES
+
 app.use("/api/orders", orderRoutes);
+
 app.use("/api/admin", adminRoutes);
+
 app.use("/api/products", productRoutes);
+
 app.use("/api/stock-movements", stockMovementRoutes);
+
 app.use("/api/coupons", couponRoutes);
+
 app.use("/api/reviews", reviewRoutes);
+
 app.use("/api/images", imageRoutes);
 
 // =====================================
@@ -131,19 +174,27 @@ const PORT = process.env.PORT || 5000;
 // =====================================
 
 mongoose.connect(process.env.MONGODB_URI)
+
     .then(() => {
 
         console.log("MongoDB connected successfully!");
 
         app.listen(PORT, () => {
-            console.log(`ShopZone server is running on port ${PORT}`);
+
+            console.log(
+                `ShopZone server is running on port ${PORT}`
+            );
+
         });
 
     })
+
     .catch((error) => {
 
         console.error("MongoDB connection failed:");
+
         console.error(error.message);
 
         process.exit(1);
+
     });
