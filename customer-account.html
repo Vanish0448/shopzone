@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ShopZone - Customer Account</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .account-wrapper {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .account-wrapper h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .account-description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .account-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .account-tabs button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #eee;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .account-tabs button.active {
+            background: #ff9800;
+            color: white;
+        }
+
+        .account-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .account-form label {
+            font-weight: bold;
+        }
+
+        .account-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .account-submit {
+            background: #198754;
+            color: white;
+            padding: 13px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .account-submit:hover {
+            background: #146c43;
+        }
+
+        .account-message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .account-back {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #e68900;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .account-wrapper {
+                margin: 25px 5%;
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+            <h1>SHOPZONE</h1>
+
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#products">Products</a>
+                <a href="index.html#shopping-cart">Cart</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="account-wrapper">
+
+            <h2>My ShopZone Account</h2>
+
+            <p class="account-description">
+                Create an account or log in to continue.
+            </p>
+
+            <div class="account-tabs">
+                <button
+                    type="button"
+                    id="login-tab"
+                    class="active"
+                >
+                    Login
+                </button>
+
+                <button
+                    type="button"
+                    id="register-tab"
+                >
+                    Register
+                </button>
+            </div>
+
+            <!-- LOGIN FORM -->
+
+            <form id="login-form" class="account-form">
+
+                <label for="login-email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="login-email"
+                    placeholder="Enter your email"
+                    required
+                    autocomplete="email"
+                >
+
+                <label for="login-password">Password</label>
+
+                <input
+                    type="password"
+                    id="login-password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+
+                <button
+                    type="submit"
+                    class="account-submit"
+                    id="login-button"
+                >
+                    Log In
+                </button>
+
+            </form>
+
+            <!-- REGISTRATION FORM -->
+
+            <form
+                id="register-form"
+                class="account-form"
+                hidden
+            >
+
+                <label for="register-name">Full Name</label>
+
+                <input
+                    type="text"
+                    id="register-name"
+                    placeholder="Enter your full name"
+                    maxlength="100"
+                    required
+                    autocomplete="name"
+                >
+
+                <label for="register-email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="register-email"
+                    placeholder="Enter your email"
+                    maxlength="254"
+                    required
+                    autocomplete="email"
+                >
+
+                <label for="register-phone">Phone Number</label>
+
+                <input
+                    type="tel"
+                    id="register-phone"
+                    placeholder="Enter your phone number"
+                    maxlength="30"
+                    required
+                    autocomplete="tel"
+                >
+
+                <label for="register-password">Password</label>
+
+                <input
+                    type="password"
+                    id="register-password"
+                    placeholder="Create a password"
+                    minlength="8"
+                    maxlength="128"
+                    required
+                    autocomplete="new-password"
+                >
+
+                <label for="register-confirm-password">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="register-confirm-password"
+                    placeholder="Confirm your password"
+                    minlength="8"
+                    maxlength="128"
+                    required
+                    autocomplete="new-password"
+                >
+
+                <button
+                    type="submit"
+                    class="account-submit"
+                    id="register-button"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+            <p
+                id="account-message"
+                class="account-message"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <a href="index.html" class="account-back">
+                ← Back to ShopZone
+            </a>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ShopZone. All Rights Reserved.</p>
+    </footer>
+
+    <script src="customer-account.js"></script>
+
+</body>
+</html>

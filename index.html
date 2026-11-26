@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ShopZone - Online Store</title>
 
-    <!-- Always start at the top when the page reloads -->
+    <link rel="stylesheet" href="style.css">
+
     <script>
         if ("scrollRestoration" in history) {
             history.scrollRestoration = "manual";
@@ -15,81 +18,140 @@
             window.scrollTo(0, 0);
         });
     </script>
-
-    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
+    <!-- =====================================
+         HEADER AND NAVIGATION
+    ====================================== -->
+
     <header>
+
         <nav class="navbar">
+
             <h1>SHOPZONE</h1>
 
             <div class="nav-links">
+
                 <a href="#home">Home</a>
+
                 <a href="#products">Products</a>
+
                 <a href="#shopping-cart">
                     Cart (<span id="cart-count">0</span>)
                 </a>
+
                 <a href="#order-history">My Orders</a>
-                <a href="#track-order">Track Order</a>
+
+                <a href="#tracking">Track Order</a>
+
                 <a href="#product-reviews">Reviews</a>
+
+                <a href="customer-account.html">My Account</a>
+
             </div>
+
         </nav>
+
     </header>
 
-    <!-- HERO SECTION -->
+
+    <!-- =====================================
+         HERO SECTION
+    ====================================== -->
+
     <section class="hero" id="home">
+
         <h2>Welcome to ShopZone</h2>
-        <p>Your favourite products, all in one place.</p>
-        <a href="#products" class="shop-button">Shop Now</a>
+
+        <p>Your One-Stop Online Shopping Destination</p>
+
+        <a href="#products" class="shop-button">
+            Shop Now
+        </a>
+
     </section>
+
 
     <main>
 
-        <!-- PRODUCTS SECTION -->
+        <!-- =====================================
+             PRODUCTS SECTION
+        ====================================== -->
+
         <section class="products-section" id="products">
+
             <h2>Our Products</h2>
 
             <div class="filter-controls">
+
                 <input
                     type="text"
                     id="search-input"
-                    placeholder="Search for products..."
+                    placeholder="Search products..."
                 >
 
                 <select id="category-filter">
+
                     <option value="all">All Categories</option>
+
                     <option value="electronics">Electronics</option>
+
                     <option value="fashion">Fashion</option>
+
                     <option value="accessories">Accessories</option>
+
                 </select>
+
             </div>
 
-            <div id="product-list" class="product-grid"></div>
+            <div class="product-grid" id="product-list">
+
+                <p>Loading products...</p>
+
+            </div>
+
         </section>
 
-        <!-- PRODUCT REVIEWS -->
+
+        <!-- =====================================
+             PRODUCT REVIEWS SECTION
+        ====================================== -->
+
         <section class="reviews-section" id="product-reviews">
-            <h2>Product Reviews & Ratings</h2>
+
+            <h2>Customer Reviews</h2>
 
             <p>
-                Share your shopping experience and see what
-                other customers think about our products.
+                Share your experience and see what other customers think
+                about our products.
             </p>
 
             <div class="review-container">
 
+                <!-- REVIEW SUBMISSION FORM -->
+
                 <form id="review-form">
 
-                    <h3>Write a Product Review</h3>
+                    <h3>Write a Review</h3>
 
-                    <label for="review-product">Select Product</label>
+                    <label for="review-product">
+                        Select Product
+                    </label>
 
                     <select id="review-product" required>
-                        <option value="">Choose a product</option>
+
+                        <option value="">
+                            Select a product
+                        </option>
+
                     </select>
 
-                    <label for="review-customer-name">Your Name</label>
+
+                    <label for="review-customer-name">
+                        Your Name
+                    </label>
 
                     <input
                         type="text"
@@ -98,7 +160,10 @@
                         required
                     >
 
-                    <label for="review-customer-email">Your Email</label>
+
+                    <label for="review-customer-email">
+                        Email Address
+                    </label>
 
                     <input
                         type="email"
@@ -107,97 +172,169 @@
                         required
                     >
 
-                    <label>Choose Your Rating</label>
+
+                    <label>
+                        Your Rating
+                    </label>
 
                     <div
                         class="review-star-selector"
                         id="review-star-selector"
-                        role="radiogroup"
-                        aria-label="Product rating"
                     >
-                        <button type="button" data-rating="1" aria-label="1 star">★</button>
-                        <button type="button" data-rating="2" aria-label="2 stars">★</button>
-                        <button type="button" data-rating="3" aria-label="3 stars">★</button>
-                        <button type="button" data-rating="4" aria-label="4 stars">★</button>
-                        <button type="button" data-rating="5" aria-label="5 stars">★</button>
+
+                        <button type="button" data-rating="1">★</button>
+
+                        <button type="button" data-rating="2">★</button>
+
+                        <button type="button" data-rating="3">★</button>
+
+                        <button type="button" data-rating="4">★</button>
+
+                        <button type="button" data-rating="5">★</button>
+
                     </div>
 
-                    <input type="hidden" id="review-rating" value="">
+                    <input
+                        type="hidden"
+                        id="review-rating"
+                        value=""
+                    >
 
-                    <label for="review-comment">Your Review</label>
+
+                    <label for="review-comment">
+                        Your Review
+                    </label>
 
                     <textarea
                         id="review-comment"
                         rows="5"
                         maxlength="1000"
-                        placeholder="Write your experience with this product..."
+                        placeholder="Write your review..."
                         required
                     ></textarea>
 
-                    <button type="submit" id="submit-review-button">
+
+                    <button
+                        type="submit"
+                        id="submit-review-button"
+                    >
                         Submit Review
                     </button>
 
-                    <p id="review-message" aria-live="polite"></p>
+                    <p
+                        id="review-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
 
                 </form>
 
+
+                <!-- DISPLAY CUSTOMER REVIEWS -->
+
                 <div class="reviews-display">
 
-                    <h3>Customer Reviews</h3>
+                    <h3>Customer Feedback</h3>
 
                     <label for="reviews-product-filter">
-                        View Reviews For:
+                        Select Product
                     </label>
 
                     <select id="reviews-product-filter">
-                        <option value="">Select a product</option>
+
+                        <option value="">
+                            Select a product
+                        </option>
+
                     </select>
 
-                    <div id="product-rating-summary" aria-live="polite"></div>
 
-                    <div id="reviews-list" aria-live="polite">
-                        <p>Select a product to see its reviews.</p>
+                    <div id="product-rating-summary">
+
+                    </div>
+
+
+                    <div id="reviews-list">
+
+                        <p>
+                            Select a product to view its reviews.
+                        </p>
+
                     </div>
 
                 </div>
 
             </div>
+
         </section>
 
-        <!-- SHOPPING CART -->
-        <section class="cart-section" id="shopping-cart">
-            <h2>My Shopping Cart</h2>
 
-            <div id="cart-items"></div>
+        <!-- =====================================
+             SHOPPING CART
+        ====================================== -->
+
+        <section class="cart-section" id="shopping-cart">
+
+            <h2>Shopping Cart</h2>
+
+            <div id="cart-items">
+
+                <p>Your cart is empty.</p>
+
+            </div>
 
             <div class="cart-total">
-                <h3>Total: <span id="cart-total">₦0</span></h3>
 
-                <button id="clear-cart" class="clear-button">
+                <h3>
+                    Total:
+                    <span id="cart-total">₦0</span>
+                </h3>
+
+                <button
+                    class="clear-button"
+                    id="clear-cart"
+                    type="button"
+                >
                     Clear Cart
                 </button>
 
                 <button
-                    id="checkout-button"
                     class="checkout-button"
-                    hidden
+                    id="checkout-button"
+                    type="button"
                 >
                     Proceed to Checkout
                 </button>
+
             </div>
+
         </section>
 
-        <!-- CHECKOUT -->
-        <section class="checkout-section" id="checkout-section" hidden>
+
+        <!-- =====================================
+             CHECKOUT SECTION
+        ====================================== -->
+
+        <section
+            class="checkout-section"
+            id="checkout-section"
+            hidden
+        >
+
             <h2>Checkout</h2>
 
             <div class="checkout-container">
 
+                <!-- CUSTOMER INFORMATION -->
+
                 <form id="checkout-form">
+
                     <h3>Customer Information</h3>
 
-                    <label for="customer-name">Full Name</label>
+                    <label for="customer-name">
+                        Full Name
+                    </label>
+
                     <input
                         type="text"
                         id="customer-name"
@@ -205,7 +342,11 @@
                         required
                     >
 
-                    <label for="customer-email">Email Address</label>
+
+                    <label for="customer-email">
+                        Email Address
+                    </label>
+
                     <input
                         type="email"
                         id="customer-email"
@@ -213,7 +354,11 @@
                         required
                     >
 
-                    <label for="customer-phone">Phone Number</label>
+
+                    <label for="customer-phone">
+                        Phone Number
+                    </label>
+
                     <input
                         type="tel"
                         id="customer-phone"
@@ -221,163 +366,256 @@
                         required
                     >
 
-                    <label for="delivery-address">Delivery Address</label>
+
+                    <label for="delivery-address">
+                        Delivery Address
+                    </label>
+
                     <textarea
                         id="delivery-address"
-                        placeholder="Enter your delivery address"
                         rows="4"
+                        placeholder="Enter your delivery address"
                         required
                     ></textarea>
 
-                    <button type="submit" class="place-order-button">
-                        Place Order
+
+                    <button
+                        type="submit"
+                        class="place-order-button"
+                    >
+                        Pay Now
                     </button>
 
                     <button
                         type="button"
-                        id="cancel-checkout"
                         class="cancel-button"
+                        id="cancel-checkout"
                     >
                         Cancel
                     </button>
+
                 </form>
 
+
+                <!-- ORDER SUMMARY -->
+
                 <div class="order-summary">
+
                     <h3>Order Summary</h3>
 
-                    <div id="checkout-summary"></div>
+                    <div id="checkout-summary">
 
-                    <!-- DISCOUNT COUPON -->
+                        <p>Your order summary will appear here.</p>
+
+                    </div>
+
+
+                    <!-- COUPON -->
+
                     <div class="coupon-section">
-                        <h3>Have a Promo Code?</h3>
 
-                        <div class="coupon-input-container">
-                            <input
-                                type="text"
-                                id="coupon-code"
-                                placeholder="Enter promo code"
-                                autocomplete="off"
-                            >
+                        <h3>Have a Coupon?</h3>
 
-                            <button
-                                type="button"
-                                id="apply-coupon-button"
-                            >
-                                Apply Coupon
-                            </button>
-                        </div>
+                        <input
+                            type="text"
+                            id="coupon-code"
+                            placeholder="Enter coupon code"
+                        >
 
-                        <p id="coupon-message" aria-live="polite"></p>
-                    </div>
+                        <button
+                            type="button"
+                            id="apply-coupon-button"
+                        >
+                            Apply Coupon
+                        </button>
 
-                    <!-- PRICE SUMMARY -->
-                    <div class="checkout-price-summary">
-
-                        <p>
-                            Subtotal:
-                            <span id="checkout-subtotal">₦0</span>
-                        </p>
-
-                        <p id="checkout-discount-row" hidden>
-                            Discount:
-                            <span id="checkout-discount">-₦0</span>
-                        </p>
+                        <p id="coupon-message"></p>
 
                     </div>
 
-                    <h3 class="summary-total">
-                        Total: <span id="checkout-total">₦0</span>
-                    </h3>
+
+                    <!-- PRICE BREAKDOWN -->
+
+                    <div class="summary-item">
+
+                        <span>Subtotal:</span>
+
+                        <strong id="checkout-subtotal">
+                            ₦0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-item">
+
+                        <span>Discount:</span>
+
+                        <strong id="checkout-discount">
+                            ₦0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-item summary-total">
+
+                        <strong>Total:</strong>
+
+                        <strong id="checkout-total">
+                            ₦0
+                        </strong>
+
+                    </div>
+
                 </div>
 
             </div>
+
         </section>
 
-        <!-- ORDER CONFIRMATION -->
-        <section class="confirmation-section" id="confirmation-section" hidden>
-            <h2>Order Placed Successfully!</h2>
 
-            <p>Thank you for shopping with ShopZone.</p>
+        <!-- =====================================
+             ORDER CONFIRMATION
+        ====================================== -->
 
-            <p>Your order number is:</p>
+        <section
+            class="confirmation-section"
+            id="confirmation-section"
+            hidden
+        >
 
-            <h3 id="order-number"></h3>
+            <h2>Order Confirmed!</h2>
 
-            <p id="confirmation-message"></p>
+            <p id="confirmation-message">
+                Thank you for shopping with ShopZone.
+            </p>
 
-            <button id="continue-shopping" class="shop-button">
+            <h3 id="confirmation-order-number"></h3>
+
+            <p>
+                Your payment has been processed.
+            </p>
+
+            <a href="#products" class="shop-button">
                 Continue Shopping
-            </button>
+            </a>
+
         </section>
 
-        <!-- CUSTOMER ORDER TRACKING -->
-        <section class="tracking-section" id="track-order">
+
+        <!-- =====================================
+             ORDER TRACKING
+        ====================================== -->
+
+        <section class="tracking-section" id="tracking">
+
             <h2>Track Your Order</h2>
 
             <p>
                 Enter your order number and email address
-                to check the status of your order.
+                to check your order status.
             </p>
 
             <div class="tracking-container">
 
                 <form id="track-order-form">
 
-                    <label for="track-order-number">Order Number</label>
+                    <label for="track-order-number">
+                        Order Number
+                    </label>
 
                     <input
                         type="text"
                         id="track-order-number"
-                        placeholder="Example: SZ-1794929263311"
+                        placeholder="Enter your order number"
                         required
                     >
 
-                    <label for="track-order-email">Email Address</label>
+
+                    <label for="track-order-email">
+                        Email Address
+                    </label>
 
                     <input
                         type="email"
                         id="track-order-email"
-                        placeholder="Enter the email used for your order"
+                        placeholder="Enter your email address"
                         required
                     >
 
-                    <button type="submit" id="track-order-button">
-                        Track My Order
+
+                    <button
+                        type="submit"
+                        id="track-order-button"
+                    >
+                        Track Order
                     </button>
 
                 </form>
 
-                <div id="tracking-result" aria-live="polite"></div>
+
+                <div id="tracking-result">
+
+                </div>
 
             </div>
+
         </section>
 
-        <!-- ORDER HISTORY -->
-        <section class="history-section" id="order-history">
-            <h2>My Order History</h2>
 
-            <div id="order-history-list"></div>
+        <!-- =====================================
+             ORDER HISTORY
+        ====================================== -->
+
+        <section class="history-section" id="order-history">
+
+            <h2>My Orders</h2>
+
+            <div id="order-history-list">
+
+                <p class="history-empty">
+                    No previous orders found.
+                </p>
+
+            </div>
 
             <button
-                id="clear-history"
+                type="button"
                 class="clear-button"
-                hidden
+                id="clear-history"
             >
                 Clear Order History
             </button>
+
         </section>
 
     </main>
 
-    <!-- FOOTER -->
+
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
+
     <footer>
-        <p>&copy; 2026 ShopZone. All rights reserved.</p>
+
+        <p>
+            &copy; 2026 ShopZone. All Rights Reserved.
+        </p>
+
     </footer>
 
-    <!-- JAVASCRIPT -->
+
+    <!-- =====================================
+         JAVASCRIPT FILES
+    ====================================== -->
+
     <script src="script.js"></script>
+
     <script src="payment.js"></script>
+
     <script src="reviews.js"></script>
 
 </body>
+
 </html>
