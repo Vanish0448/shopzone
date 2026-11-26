@@ -100,6 +100,8 @@ const orderSchema = new mongoose.Schema({
         min: 0
     },
 
+    // ORDER FULFILMENT STATUS
+
     status: {
         type: String,
         enum: [
@@ -110,6 +112,24 @@ const orderSchema = new mongoose.Schema({
             "Cancelled"
         ],
         default: "Pending"
+    },
+
+    // PAYMENT STATUS
+
+    paymentStatus: {
+        type: String,
+        enum: [
+            "Pending",
+            "Successful",
+            "Failed"
+        ],
+        default: "Pending"
+    },
+
+    paymentMethod: {
+        type: String,
+        default: "Paystack",
+        trim: true
     },
 
     stockRestored: {

@@ -315,8 +315,6 @@ router.post("/initialize", async (req, res) => {
             });
         }
 
-        // VALIDATE CUSTOMER DETAILS
-
         const customerError = validateCustomerDetails(req.body);
 
         if (customerError) {
@@ -335,8 +333,6 @@ router.post("/initialize", async (req, res) => {
             couponCode
         } = req.body;
 
-        // VALIDATE CART
-
         const cartResult = validateCartItems(items);
 
         if (cartResult.error) {
@@ -347,8 +343,6 @@ router.post("/initialize", async (req, res) => {
         }
 
         const quantities = cartResult.quantities;
-
-        // NORMALIZE COUPON CODE
 
         const normalizedCouponCode = couponCode
             ? String(couponCode).trim().toUpperCase()
@@ -361,7 +355,7 @@ router.post("/initialize", async (req, res) => {
             });
         }
 
-        // FETCH REAL PRODUCT INFORMATION FROM MONGODB
+        // FETCH REAL PRODUCT INFORMATION
 
         const productIds = [...quantities.keys()];
 
@@ -437,8 +431,6 @@ router.post("/initialize", async (req, res) => {
                 message: "The minimum Paystack payment is ₦50."
             });
         }
-
-        // GENERATE UNIQUE PAYMENT REFERENCE
 
         const reference = generatePaymentReference();
 
@@ -535,42 +527,16 @@ router.post("/initialize", async (req, res) => {
             error.message
         );
 
-        if (error.code === "COUPON_NOT_FOUND") {
-            return res.status(400).json({
-                success: false,
-                message: error.message
-            });
-        }
+        const couponErrors = [
+            "COUPON_NOT_FOUND",
+            "COUPON_INACTIVE",
+            "COUPON_EXPIRED",
+            "COUPON_USAGE_LIMIT",
+            "COUPON_MINIMUM_NOT_MET",
+            "INVALID_COUPON_VALUE"
+        ];
 
-        if (error.code === "COUPON_INACTIVE") {
-            return res.status(400).json({
-                success: false,
-                message: error.message
-            });
-        }
-
-        if (error.code === "COUPON_EXPIRED") {
-            return res.status(400).json({
-                success: false,
-                message: error.message
-            });
-        }
-
-        if (error.code === "COUPON_USAGE_LIMIT") {
-            return res.status(400).json({
-                success: false,
-                message: error.message
-            });
-        }
-
-        if (error.code === "COUPON_MINIMUM_NOT_MET") {
-            return res.status(400).json({
-                success: false,
-                message: error.message
-            });
-        }
-
-        if (error.code === "INVALID_COUPON_VALUE") {
+        if (couponErrors.includes(error.code)) {
             return res.status(400).json({
                 success: false,
                 message: error.message
@@ -951,7 +917,13 @@ router.post("/verify", async (req, res) => {
 
                 discountAmount: currentPayment.discountAmount,
 
-                total: currentPayment.total
+                total: currentPayment.total,
+
+                // NEW PAYMENT STATUS FIELDS
+
+                paymentStatus: "Successful",
+
+                paymentMethod: "Paystack"
 
             });
 

@@ -95,6 +95,57 @@ function createCell(value) {
 }
 
 // =====================================
+// PAYMENT STATUS
+// =====================================
+
+function getPaymentStatus(order) {
+    const status = String(order.paymentStatus || "").trim();
+
+    return status || "Not recorded";
+}
+
+function createPaymentStatusCell(order) {
+    const cell = document.createElement("td");
+    const badge = document.createElement("span");
+
+    const paymentStatus = getPaymentStatus(order);
+
+    badge.textContent = paymentStatus;
+    badge.className = "payment-status-badge";
+
+    badge.style.display = "inline-block";
+    badge.style.padding = "5px 10px";
+    badge.style.borderRadius = "20px";
+    badge.style.fontSize = "12px";
+    badge.style.fontWeight = "bold";
+
+    switch (paymentStatus.toLowerCase()) {
+        case "successful":
+            badge.style.backgroundColor = "#d1e7dd";
+            badge.style.color = "#0f5132";
+            break;
+
+        case "pending":
+            badge.style.backgroundColor = "#fff3cd";
+            badge.style.color = "#856404";
+            break;
+
+        case "failed":
+            badge.style.backgroundColor = "#f8d7da";
+            badge.style.color = "#842029";
+            break;
+
+        default:
+            badge.style.backgroundColor = "#e2e3e5";
+            badge.style.color = "#41464b";
+    }
+
+    cell.appendChild(badge);
+
+    return cell;
+}
+
+// =====================================
 // AUTHENTICATION
 // =====================================
 
@@ -204,7 +255,7 @@ function createPaginationContainer() {
 async function loadDashboard() {
     try {
         ordersTableBody.innerHTML =
-            '<tr><td colspan="6">Loading orders...</td></tr>';
+            '<tr><td colspan="7">Loading orders...</td></tr>';
 
         customersTableBody.innerHTML =
             '<tr><td colspan="6">Loading customers...</td></tr>';
@@ -237,7 +288,7 @@ async function loadDashboard() {
         console.error("Dashboard error:", error);
 
         ordersTableBody.innerHTML =
-            '<tr><td colspan="6">Could not load orders.</td></tr>';
+            '<tr><td colspan="7">Could not load orders.</td></tr>';
 
         customersTableBody.innerHTML =
             '<tr><td colspan="6">Could not load customers.</td></tr>';
@@ -331,7 +382,7 @@ function displayRecentOrders(orders) {
 
     if (orders.length === 0) {
         ordersTableBody.innerHTML =
-            '<tr><td colspan="6">No matching orders found.</td></tr>';
+            '<tr><td colspan="7">No matching orders found.</td></tr>';
 
         updatePagination(0, 0);
         return;
@@ -402,6 +453,7 @@ function displayRecentOrders(orders) {
             createCell(order.customerName || "Unknown"),
             createCell(formatCurrency(order.total)),
             statusCell,
+            createPaymentStatusCell(order),
             actionCell,
             createCell(formattedDate)
         );
@@ -515,7 +567,9 @@ orderSearchInput.addEventListener("input", () => {
 orderStatusFilter.addEventListener("change", () => {
     currentPage = 1;
     filterOrders();
-});// =====================================
+});
+
+// =====================================
 // ORDER DETAILS
 // =====================================
 
@@ -552,6 +606,8 @@ function showOrderDetails(order) {
     addOrderDetail(info, "Order Number", order.orderNumber || "N/A");
     addOrderDetail(info, "Order Date", formattedDate);
     addOrderDetail(info, "Order Status", order.status || "Pending");
+    addOrderDetail(info, "Payment Status", getPaymentStatus(order));
+    addOrderDetail(info, "Payment Method", order.paymentMethod || "Not recorded");
 
     orderDetailsContent.appendChild(info);
 
@@ -766,7 +822,8 @@ function showCustomerDetails(customer) {
             "Order Number",
             "Date",
             "Products",
-            "Status",
+            "Order Status",
+            "Payment Status",
             "Order Total"
         ].forEach(title => {
             const th = document.createElement("th");
@@ -803,6 +860,7 @@ function showCustomerDetails(customer) {
                 createCell(formattedDate),
                 createCell(productNames),
                 createCell(order.status || "Pending"),
+                createPaymentStatusCell(order),
                 createCell(formatCurrency(order.total))
             );
 
@@ -967,7 +1025,9 @@ function generateOrderInvoice(order) {
 
             <p><strong>Order:</strong> ${escapeInvoiceHTML(order.orderNumber || "N/A")}</p>
             <p><strong>Date:</strong> ${escapeInvoiceHTML(formattedDate)}</p>
-            <p><strong>Status:</strong> ${escapeInvoiceHTML(order.status || "Pending")}</p>
+            <p><strong>Order Status:</strong> ${escapeInvoiceHTML(order.status || "Pending")}</p>
+            <p><strong>Payment Status:</strong> ${escapeInvoiceHTML(getPaymentStatus(order))}</p>
+            <p><strong>Payment Method:</strong> ${escapeInvoiceHTML(order.paymentMethod || "Not recorded")}</p>
 
             <h3>Customer Information</h3>
             <p>${escapeInvoiceHTML(order.customerName || "Unknown")}</p>
@@ -1002,7 +1062,9 @@ function generateOrderInvoice(order) {
     invoiceWindow.document.open();
     invoiceWindow.document.write(invoiceHTML);
     invoiceWindow.document.close();
-}// =====================================
+}
+
+// =====================================
 // UPDATE ORDER STATUS
 // =====================================
 
@@ -1341,7 +1403,9 @@ function displayProducts(products) {
 
         productsTableBody.appendChild(row);
     });
-}// =====================================
+}
+
+// =====================================
 // RESTOCK PRODUCT
 // =====================================
 
@@ -1353,7 +1417,6 @@ async function restockProduct(product, button) {
         `Enter the quantity received:`
     );
 
-    // Stop if the administrator cancels.
     if (quantityInput === null) {
         return;
     }
@@ -1415,7 +1478,6 @@ async function restockProduct(product, button) {
             `New Available Stock: ${data.product.stock}`
         );
 
-        // Refresh Product Management, Stock Overview and Stock Alerts.
         await loadProducts();
 
     } catch (error) {
@@ -1613,7 +1675,6 @@ logoutButton.addEventListener("click", function() {
 // =====================================
 
 if (adminToken) {
-    // Always start at the top when the dashboard is loaded or reloaded.
     window.scrollTo(0, 0);
 
     loadDashboard();
