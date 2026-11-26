@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const crypto = require("node:crypto");
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
@@ -9,6 +10,7 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Coupon = require("../models/Coupon");
 const StockMovement = require("../models/StockMovement");
+const Customer = require("../models/Customer");
 
 // =====================================
 // GENERATE SECURE REFERENCES
@@ -62,6 +64,108 @@ async function paystackRequest(url, options = {}) {
     }
 
     return data;
+}
+
+
+// =====================================
+// VALIDATE OPTIONAL CUSTOMER ACCOUNT
+// =====================================
+
+async function getLinkedCustomer(req, customerEmail) {
+
+    const authHeader = req.headers.authorization;
+
+    // Guest checkout is still allowed.
+    if (!authHeader) {
+        return {
+            customer: null,
+            error: null,
+            status: 200
+        };
+    }
+
+    if (!authHeader.startsWith("Bearer ")) {
+        return {
+            customer: null,
+            error: "Invalid customer authentication.",
+            status: 401
+        };
+    }
+
+    if (!process.env.JWT_SECRET) {
+        return {
+            customer: null,
+            error: "Server authentication configuration error.",
+            status: 500
+        };
+    }
+
+    try {
+
+        const token = authHeader.split(" ")[1];
+
+        if (!token) {
+            return {
+                customer: null,
+                error: "Invalid customer authentication.",
+                status: 401
+            };
+        }
+
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        if (
+            decoded.role !== "customer" ||
+            !decoded.customerId ||
+            !mongoose.isValidObjectId(decoded.customerId)
+        ) {
+            return {
+                customer: null,
+                error: "Customer authentication required.",
+                status: 403
+            };
+        }
+
+        const customer = await Customer.findById(
+            decoded.customerId
+        );
+
+        if (!customer) {
+            return {
+                customer: null,
+                error: "Customer account could not be found. Please log in again.",
+                status: 401
+            };
+        }
+
+        if (
+            customer.email.toLowerCase() !==
+            customerEmail.trim().toLowerCase()
+        ) {
+            return {
+                customer: null,
+                error: "Your checkout email must match your ShopZone account email.",
+                status: 403
+            };
+        }
+
+        return {
+            customer,
+            error: null,
+            status: 200
+        };
+
+    } catch (error) {
+
+        return {
+            customer: null,
+            error: "Your login session is invalid or has expired. Please log in again.",
+            status: 401
+        };
+    }
 }
 
 
@@ -333,6 +437,22 @@ router.post("/initialize", async (req, res) => {
             couponCode
         } = req.body;
 
+        // LINK PAYMENT TO CUSTOMER ACCOUNT WHEN LOGGED IN
+
+        const customerResult = await getLinkedCustomer(
+            req,
+            customerEmail
+        );
+
+        if (customerResult.error) {
+            return res.status(customerResult.status).json({
+                success: false,
+                message: customerResult.error
+            });
+        }
+
+        const linkedCustomer = customerResult.customer;
+
         const cartResult = validateCartItems(items);
 
         if (cartResult.error) {
@@ -439,6 +559,10 @@ router.post("/initialize", async (req, res) => {
         const payment = await Payment.create({
 
             reference,
+
+            customer: linkedCustomer
+                ? linkedCustomer._id
+                : null,
 
             customerName: customerName.trim(),
 
@@ -897,6 +1021,8 @@ router.post("/verify", async (req, res) => {
 
                 orderNumber: finalOrderNumber,
 
+                customer: currentPayment.customer || null,
+
                 customerName: currentPayment.customerName,
 
                 customerEmail: currentPayment.customerEmail,
@@ -918,8 +1044,6 @@ router.post("/verify", async (req, res) => {
                 discountAmount: currentPayment.discountAmount,
 
                 total: currentPayment.total,
-
-                // NEW PAYMENT STATUS FIELDS
 
                 paymentStatus: "Successful",
 

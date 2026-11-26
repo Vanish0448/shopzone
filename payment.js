@@ -5,6 +5,8 @@
 const PAYMENT_API_URL =
     "https://shopzone-sojz.onrender.com/api/payments";
 
+const CUSTOMER_TOKEN_KEY = "shopzone-customer-token";
+
 
 // =====================================
 // HTML ELEMENTS
@@ -213,6 +215,28 @@ async function initializeShopZonePayment() {
 
     };
 
+
+    // GET LOGGED-IN CUSTOMER TOKEN
+
+    const customerToken = localStorage.getItem(
+        CUSTOMER_TOKEN_KEY
+    );
+
+
+    // PREPARE REQUEST HEADERS
+
+    const requestHeaders = {
+        "Content-Type": "application/json"
+    };
+
+    if (customerToken) {
+
+        requestHeaders.Authorization =
+            `Bearer ${customerToken}`;
+
+    }
+
+
     paymentSubmitButton.disabled = true;
 
     paymentSubmitButton.textContent = "Connecting to Paystack...";
@@ -230,9 +254,7 @@ async function initializeShopZonePayment() {
 
                 method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: requestHeaders,
 
                 body: JSON.stringify(requestData)
 
@@ -381,6 +403,7 @@ async function verifyShopZonePayment(reference) {
         }
 
         const order = data.order;
+
 
         // SAVE ORDER TO LOCAL HISTORY
 

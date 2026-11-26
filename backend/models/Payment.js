@@ -10,6 +10,12 @@ const paymentSchema = new mongoose.Schema({
         maxlength: 100
     },
 
+    customer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Customer",
+        default: null
+    },
+
     customerName: {
         type: String,
         required: true,

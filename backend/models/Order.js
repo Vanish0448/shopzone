@@ -10,6 +10,12 @@ const orderSchema = new mongoose.Schema({
         maxlength: 60
     },
 
+    customer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Customer",
+        default: null
+    },
+
     customerName: {
         type: String,
         required: true,
@@ -100,8 +106,6 @@ const orderSchema = new mongoose.Schema({
         min: 0
     },
 
-    // ORDER FULFILMENT STATUS
-
     status: {
         type: String,
         enum: [
@@ -113,8 +117,6 @@ const orderSchema = new mongoose.Schema({
         ],
         default: "Pending"
     },
-
-    // PAYMENT STATUS
 
     paymentStatus: {
         type: String,

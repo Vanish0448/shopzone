@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 
 const Customer = require("../models/Customer");
+const Order = require("../models/Order");
 const protectCustomer = require("../middleware/customerAuth");
 
 const router = express.Router();
@@ -100,6 +101,13 @@ router.post("/register", registrationLimiter, async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Password is too long."
+            });
+        }
+
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({
+                success: false,
+                message: "Server authentication configuration error."
             });
         }
 
@@ -247,6 +255,7 @@ router.post("/login", loginLimiter, async (req, res) => {
 
 // =====================================
 // GET LOGGED-IN CUSTOMER PROFILE
+// GET /api/customers/me
 // =====================================
 
 router.get("/me", protectCustomer, async (req, res) => {
@@ -279,6 +288,41 @@ router.get("/me", protectCustomer, async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Unable to retrieve customer profile."
+        });
+    }
+});
+
+// =====================================
+// GET LOGGED-IN CUSTOMER ORDER HISTORY
+// GET /api/customers/orders
+// =====================================
+
+router.get("/orders", protectCustomer, async (req, res) => {
+    try {
+        const orders = await Order.find({
+            customer: req.customer.customerId
+        })
+        .select(
+            "orderNumber items subtotal couponCode discountType discountAmount total status paymentStatus paymentMethod date createdAt updatedAt"
+        )
+        .sort({
+            createdAt: -1
+        })
+        .limit(100)
+        .lean();
+
+        return res.status(200).json({
+            success: true,
+            count: orders.length,
+            orders
+        });
+
+    } catch (error) {
+        console.error("Customer order history error:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to retrieve your order history."
         });
     }
 });
